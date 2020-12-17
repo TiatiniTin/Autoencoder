@@ -59,7 +59,10 @@ encoder = keras.models.Sequential([
     keras.layers.MaxPool2D(pool_size=2)
 ])
 
-#encoder.predict(testX[0].reshape((1, 30, 30))).shape
+for layer in encoder.layers:
+    print(layer.output_shape)
+
+#encoder.predict(testX[0].reshape((3, 30, 30))).shape
 #encoder.predict(testX[0].reshape((1, 30, 30))).shape
 
 decoder = keras.models.Sequential([
@@ -73,6 +76,9 @@ decoder = keras.models.Sequential([
     keras.layers.Reshape([30, 30, 3])
 ])
 
+for layer in decoder.layers:
+    print(layer.output_shape)
+
 stacked_autoencoder = keras.models.Sequential([encoder, decoder])
 
 stacked_autoencoder.compile(loss="binary_crossentropy",
@@ -84,8 +90,8 @@ history = stacked_autoencoder.fit(trainX, trainY, epochs=10,
 figsize(20, 5)
 for i in range(8):
     plt.subplot(2, 8, i + 1)
-    pred = stacked_autoencoder.predict(testX[i].reshape((1, 30, 30)))
-    plt.imshow(testX[i])
+    pred = stacked_autoencoder.predict(testX[i].reshape((3, 30, 30)))
+    plt.imshow(testY[i])
 
     plt.subplot(2, 8, i + 8 + 1)
     plt.imshow(pred.reshape((30, 30)))
